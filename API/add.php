@@ -1,41 +1,36 @@
 <?php
+error_reporting(0);
+header('content-type: application/json');
 include('config.php');
-if ( isset( $review->apperance )and isset( $review->taste )and isset( $review->Aroma )and isset( $review->beerID )and isset( $review->user ) ) {
+//post values
+$firstName=$_POST['firstName'];
+$LastName=$_POST['lastName'];
+$email=$_POST['email'];
+$DOB=$_POST['DOB'];
+$cellular=$_POST['cellular'];
 
-	if ( $review->validation() == 1 ) {
-
-
-		$sql = "insert INTO review (appearance,aroma,taste,beerID,username,overall)
-values('" . $review->apperance . "','" . $review->Aroma . "','" . $review->taste . "','" . $review->beerID . "','" . $review->user . "','" . $review->overall() . "')";
-		//$sql= ;
-
-
+if ( isset( $firstName )and isset( $LastName )and isset( $email )and isset( $DOB)and isset( $cellular) ) {
+//code to insert and execute
+		$sql = "insert INTO person (First_Name,Last_Name,Birth_date,cellphone,email)
+values('$firstName','$LastName','$DOB','$cellular','$email')";
 		try {
 			$db = new db();
 			$db = $db->connect();
 			$stmt = $db->query( $sql );
-
-			//var_dump($users[0]);
-			// $users[0]->username;
-
-			echo '{"sever_response" : [{"message":"Rating Was succesfully added"},{"status" :"1"}]}';
-
-
-			//json_encode(array("sever_response"=>$stri));
-
-			//echo '{"sever_response" : '.$stri.'}';
-
-
+			echo json_encode(array('feedback'=>array('message'=>$firstName.' '. $LastName.' was captured successfully','status'=>'1')));
+			
 
 		} catch ( PDOException $e ) {
-			echo '{"error": {"text": "' . $e->getMessage() . '"}}';
+			//sql error response
+			echo json_encode(array('feedback'=>array($message=>$e->getMessage(),'status'=>'100')));
+			http_response_code(500);
 		}
-	} else {
-		echo '{"error": [{"aroma": "' . $review->messAroma . '"},{"appearance": "' . $review->messApp . '"},{"taste": "' . $review->messTaste . '"},{"status": "3"}]}';
-	}
+	
 
 } else{
-	echo '{"error": [{"text": "No Data Was Posted or missing Data"},{"status":"100"}]}';
-	http_response_code(404);
+	//global error response
+	echo json_encode(array('feedback'=>array($message=>'No Data Was Posted or missing Data','status'=>'100')));
+	
+	http_response_code(412);
 }
 ?>

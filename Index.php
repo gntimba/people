@@ -45,34 +45,36 @@
 			<div class="form-group row">
 				<label for="firstName" class="col-sm-2 col-form-label">First Name</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="firstName" placeholder="First Name">
+					<input type="text" class="form-control" id="firstName" placeholder="First Name" name="firstName" required>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="LastName" class="col-sm-2 col-form-label">Last Name</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="LastName" placeholder="Last Name">
+					<input type="text" class="form-control" id="LastName" placeholder="Last Name" name="lastName" required>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
 				<div class="col-sm-10">
-					<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+					<input type="email" class="form-control" id="inputEmail3" placeholder="Email" name="email" required>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="date" class="col-sm-2 col-form-label">Date Of Birth</label>
 				<div class="col-sm-10">
-					<input type="date" class="form-control" id="date">
+					<input type="date" class="form-control" id="date" name="DOB" required>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label for="cellular" class="col-sm-2 col-form-label">Cell Phone</label>
 				<div class="col-sm-10">
-					<input type="tel" class="form-control" id="cellular" placeholder="Cell Phone Number">
+					<input type="tel" class="form-control" id="cellular" placeholder="Cell Phone Number" name="cellular" required>
 				</div>
 			</div>
 			<center><input type="submit" id="submit" class="btn btn-dark" value="Add Person"/>
+				<br>
+				<br>
 			</center>
 	<div style="display: none" class="alert alert-success" id='message'></div>
 	<div style="display: none" class="alert alert-danger" id='error'></div>
@@ -90,7 +92,7 @@
 			$( '#form' ).submit( function ( event ) {
 
 				event.preventDefault();
-
+				$( '#error' ).hide();
 				$( "#loading" ).show();
 				//$( "#form" ).hide();
 
@@ -102,21 +104,22 @@
 					processData: false,
 					contentType: false,
 					success: function ( data, status ) {
-						console.log( data )
+						console.log( data.feedback.status )
 						$( "#loading" ).hide();
-						//$( "#form" ).show();
-						if ( data.feedback[ 1 ] == true ) {
-							$( '#message' ).html( data.feedback[ 0 ] );
+					
+						if ( data.feedback.status == 1 ) {
+							$( '#message' ).html( data.feedback.message );
 							$( '#message' ).show();
+							$( "#form" )[ 0 ].reset();
 							$( '#message' ).fadeOut( 5000 );
 
 						} else {
-							$( '#error' ).html( data.feedback[ 0 ] );
+							$( '#error' ).html( data.feedback.message );
 							$( '#error' ).show();
-							$( '#error' ).fadeOut( 5000 );
+							//$( '#error' ).fadeOut( 5000 );
 
 						}
-						$( "#form" )[ 0 ].reset();
+						
 					},
 					error: function ( xhr, desc, err ) {
 
