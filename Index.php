@@ -27,7 +27,7 @@
 						<a class="nav-link p-2 text-dark" href="#">Add People <span class="sr-only">(current)</span></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link p-2 text-dark" href="#">View People</a>
+						<a class="nav-link p-2 text-dark" href="view.php">View People</a>
 					</li>
 				</ul>
 
